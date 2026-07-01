@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eba-xbrl-validator"
+version = "0.1.0"
+description = "Validates EBA COREP/FINREP XBRL regulatory submissions against the EBA taxonomy and validation rules."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Ehsan Ahmed" }]
+keywords = ["xbrl", "regtech", "eba", "corep", "finrep", "regulatory-reporting", "arelle"]
+dependencies = [
+    "arelle-release>=2.30",
+    "pydantic>=2.0",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.110", "uvicorn>=0.29"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+eba-xbrl-validator = "xbrlval.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xbrlval"]
