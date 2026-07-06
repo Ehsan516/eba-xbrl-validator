@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbrli:xbrl xmlns:xbrli="http://www.xbrl.org/2003/instance"
+            xmlns:link="http://www.xbrl.org/2003/linkbase"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xmlns:iso4217="http://www.xbrl.org/2003/iso4217"
+            xmlns:demo="http://example.com/demo">
+
+  <link:schemaRef xlink:type="simple" xlink:href="demo.xsd"/>
+
+  <xbrli:context id="c1">
+    <xbrli:entity>
+      <xbrli:identifier scheme="http://standards.iso.org/iso/17442">529900T8BM49AURSDO55</xbrli:identifier>
+    </xbrli:entity>
+    <xbrli:period>
+      <xbrli:instant>2025-12-31</xbrli:instant>
+    </xbrli:period>
+  </xbrli:context>
+
+  <xbrli:unit id="u-eur">
+    <xbrli:measure>iso4217:EUR</xbrli:measure>
+  </xbrli:unit>
+
+  <demo:TierOneCapital contextRef="c1" unitRef="u-eur" decimals="0">5000000</demo:TierOneCapital>
+  <demo:TotalAssets contextRef="c1" unitRef="u-eur" decimals="0">125000000</demo:TotalAssets>
+
+</xbrli:xbrl>
