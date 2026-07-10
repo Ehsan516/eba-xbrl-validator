@@ -1,4 +1,5 @@
 from __future__ import annotations
+import sys
 from pathlib import Path
 import typer
 from xbrlval import __version__
@@ -61,6 +62,8 @@ def validate(
 
 
 def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     app()
 
 
