@@ -61,6 +61,27 @@ def validate(
     raise typer.Exit(code=0 if report.is_valid else 1)
 
 
+@app.command()
+def ui(
+    host: str = typer.Option("127.0.0.1", help="Interface to bind"),
+    port: int = typer.Option(8000, help="Port to serve on"),
+    no_browser: bool = typer.Option(
+        False, "--no-browser", help="Don't open a browser window automatically"
+    ),
+) -> None:
+    """Launch the local web UI."""
+    try:
+        from xbrlval.webui import main as run_ui
+    except ImportError:
+        typer.echo(
+            "The web UI requires the 'api' extra: pip install 'eba-xbrl-validator[api]'",
+            err=True,
+        )
+        raise typer.Exit(code=1) from None
+
+    run_ui(host=host, port=port, open_browser=not no_browser)
+
+
 def main() -> None:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
