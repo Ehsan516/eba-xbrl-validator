@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from xbrlval.model import Severity, ValidationLayer, ValidationReport
+from xbrlval.model import BatchReport, Severity, ValidationLayer, ValidationReport
 
 _LAYER_ORDER = list(ValidationLayer)
 
@@ -42,5 +42,29 @@ def to_text(report: ValidationReport) -> str:
             if f.concept or f.context_ref:
                 location = f"  ({f.concept or '?'} @ {f.context_ref or '?'})"
             lines.append(f"  {_SEVERITY_MARK[f.severity]} {f.code}: {f.message}{location}")
+
+    return "\n".join(lines)
+
+
+def to_json_batch(batch: BatchReport) -> str:
+    return batch.model_dump_json(indent=2)
+
+
+def to_text_batch(batch: BatchReport) -> str:
+    counts = batch.counts()
+    valid_count = sum(1 for r in batch.reports if r.is_valid)
+    lines = [
+        f"Batch verdict : {'VALID' if batch.is_valid else 'INVALID'}",
+        f"Instances     : {len(batch.reports)} "
+        f"({valid_count} valid, {len(batch.reports) - valid_count} invalid)",
+        "Findings      : "
+        f"{counts[Severity.BLOCKING]} blocking, "
+        f"{counts[Severity.WARNING]} warning, "
+        f"{counts[Severity.INFO]} info",
+    ]
+    for report in batch.reports:
+        lines.append("")
+        lines.append("=" * 60)
+        lines.append(to_text(report))
 
     return "\n".join(lines)

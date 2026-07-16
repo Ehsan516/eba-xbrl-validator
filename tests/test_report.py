@@ -1,7 +1,7 @@
 import json
 
-from xbrlval.model import Finding, Severity, ValidationLayer, ValidationReport
-from xbrlval.report import to_json, to_text
+from xbrlval.model import BatchReport, Finding, Severity, ValidationLayer, ValidationReport
+from xbrlval.report import to_json, to_json_batch, to_text, to_text_batch
 
 
 def make_report() -> ValidationReport:
@@ -41,3 +41,28 @@ def test_json_report_round_trips():
     assert len(payload["findings"]) == 2
     assert payload["findings"][0]["severity"] == "blocking"
     assert payload["findings"][1]["layer"] == "custom"
+
+
+def make_batch() -> BatchReport:
+    return BatchReport(
+        reports=[
+            ValidationReport(instance="clean.xbrl"),
+            make_report(),
+        ]
+    )
+
+
+def test_text_batch_report_contains_verdict_and_per_instance_reports():
+    text = to_text_batch(make_batch())
+    assert "Batch verdict : INVALID" in text
+    assert "Instances     : 2 (1 valid, 1 invalid)" in text
+    assert "clean.xbrl" in text
+    assert "demo.xbrl" in text
+    assert "xbrl.4.6.1:itemContextRef" in text
+
+
+def test_json_batch_report_round_trips():
+    payload = json.loads(to_json_batch(make_batch()))
+    assert len(payload["reports"]) == 2
+    assert payload["reports"][0]["instance"] == "clean.xbrl"
+    assert payload["reports"][1]["instance"] == "demo.xbrl"

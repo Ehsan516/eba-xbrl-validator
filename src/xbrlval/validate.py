@@ -100,6 +100,6 @@ def validate_batch(
     instance_paths: Iterable[Path],
     config: ValidatorConfig | None = None,
 ) -> BatchReport:
-    #Validate multiple instances against a shared config and return one combined report
+    #Validate multiple instances against shared config and return one report
     config = config or ValidatorConfig()
     return BatchReport(reports=[validate_instance(p, config) for p in instance_paths])
