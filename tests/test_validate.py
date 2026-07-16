@@ -4,7 +4,7 @@ import pytest
 
 from xbrlval.config import ValidatorConfig
 from xbrlval.model import Severity, ValidationLayer
-from xbrlval.validate import categorise_layer, validate_instance
+from xbrlval.validate import categorise_layer, validate_batch, validate_instance
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -55,6 +55,36 @@ def test_custom_findings_carry_location(config):
 def test_missing_file_raises(config):
     with pytest.raises(FileNotFoundError):
         validate_instance(FIXTURES / "does_not_exist.xbrl", config)
+
+
+def test_validate_batch_reports_one_result_per_instance(config):
+    batch = validate_batch(
+        [FIXTURES / "valid_instance.xbrl", FIXTURES / "broken_instance.xbrl"], config
+    )
+    assert len(batch.reports) == 2
+    assert batch.reports[0].is_valid
+    assert not batch.reports[1].is_valid
+
+
+def test_validate_batch_is_valid_only_if_all_instances_are(config):
+    all_valid = validate_batch([FIXTURES / "valid_instance.xbrl"], config)
+    assert all_valid.is_valid
+
+    mixed = validate_batch(
+        [FIXTURES / "valid_instance.xbrl", FIXTURES / "broken_instance.xbrl"], config
+    )
+    assert not mixed.is_valid
+
+
+def test_validate_batch_counts_sum_across_instances(config):
+    batch = validate_batch(
+        [FIXTURES / "valid_instance.xbrl", FIXTURES / "broken_instance.xbrl"], config
+    )
+    valid_counts = batch.reports[0].counts()
+    broken_counts = batch.reports[1].counts()
+    totals = batch.counts()
+    for severity in Severity:
+        assert totals[severity] == valid_counts[severity] + broken_counts[severity]
 
 
 @pytest.mark.parametrize(

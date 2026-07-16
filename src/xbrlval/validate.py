@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
 
 from arelle import Validate, XbrlConst
@@ -10,7 +11,7 @@ from arelle.ModelFormulaObject import FormulaOptions
 
 from xbrlval.config import ValidatorConfig
 from xbrlval.loader import CapturedRecord, InstanceLoader
-from xbrlval.model import Finding, Severity, ValidationLayer, ValidationReport
+from xbrlval.model import BatchReport, Finding, Severity, ValidationLayer, ValidationReport
 from xbrlval.rules import run_custom_rules
 
 
@@ -93,3 +94,12 @@ def validate_instance(
         loader.close(model_xbrl)
 
     return report
+
+
+def validate_batch(
+    instance_paths: Iterable[Path],
+    config: ValidatorConfig | None = None,
+) -> BatchReport:
+    #Validate multiple instances against a shared config and return one combined report
+    config = config or ValidatorConfig()
+    return BatchReport(reports=[validate_instance(p, config) for p in instance_paths])

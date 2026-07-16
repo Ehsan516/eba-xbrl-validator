@@ -64,3 +64,19 @@ class ValidationReport(BaseModel):
         for f in self.findings:
             counts[f.severity] += 1
         return counts
+
+
+class BatchReport(BaseModel):
+    #result of validating multiple instances in one run
+    reports: list[ValidationReport] = Field(default_factory=list)
+
+    @property
+    def is_valid(self) -> bool:
+        return all(r.is_valid for r in self.reports)
+
+    def counts(self) -> dict[Severity, int]:
+        totals = {s: 0 for s in Severity}
+        for r in self.reports:
+            for severity, n in r.counts().items():
+                totals[severity] += n
+        return totals
