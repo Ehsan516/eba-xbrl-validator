@@ -1,7 +1,10 @@
 from __future__ import annotations
+
 import sys
 from pathlib import Path
+
 import typer
+
 from xbrlval import __version__
 from xbrlval.config import ValidatorConfig
 from xbrlval.report import to_json, to_json_batch, to_text, to_text_batch

@@ -5,7 +5,9 @@ from __future__ import annotations
 from arelle.ModelXbrl import ModelXbrl
 
 from xbrlval.model import Finding
-from xbrlval.rules import custom_rules
+from xbrlval.rules import (
+    custom_rules,  # noqa: F401 -- imported for its @rule registration side effect
+)
 from xbrlval.rules.base import all_rules
 
 

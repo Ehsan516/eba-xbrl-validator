@@ -1,5 +1,7 @@
-"""Project-specific validation rules. The first two mirror real EBA Filing Manual concerns: duplicate facts are
-prohibited in filings, and numeric facts are expected to declare their precision via the decimals attribute
+"""Project-specific validation rules.
+
+The first two mirror real EBA Filing Manual concerns: duplicate facts are prohibited in
+filings, and numeric facts are expected to declare their precision via the decimals attribute.
 """
 
 from __future__ import annotations

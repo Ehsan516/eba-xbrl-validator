@@ -22,7 +22,8 @@ _SEVERITY_STYLE = {
 }
 
 _PAGE_CSS = """
-body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2.5rem auto; padding: 0 1.5rem; color: #1b1b1b; }
+body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2.5rem auto;
+       padding: 0 1.5rem; color: #1b1b1b; }
 h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
 p.sub { color: #666; margin-top: 0; }
 form { border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem; }
@@ -41,7 +42,8 @@ button:hover { background: #155a30; }
 .counts { color: #444; margin: 0.5rem 0 1.5rem; }
 .layer { margin-top: 1.5rem; }
 .layer h2 { font-size: 1rem; margin-bottom: 0.4rem; }
-.finding { border-left: 4px solid #ccc; padding: 0.4rem 0.75rem; margin-bottom: 0.4rem; background: #fafafa; }
+.finding { border-left: 4px solid #ccc; padding: 0.4rem 0.75rem; margin-bottom: 0.4rem;
+           background: #fafafa; }
 .finding .code { font-weight: 600; }
 .finding .loc { color: #777; font-size: 0.85rem; }
 .back { display: inline-block; margin-top: 1.5rem; color: #1b6b3a; text-decoration: none; }
@@ -58,13 +60,15 @@ def _render_form(error: str | None = None) -> str:
     error_html = f'<p style="color:#b3261e">{escape(error)}</p>' if error else ""
     return _page(f"""
 <h1>EBA XBRL Validator</h1>
-<p class="sub">Upload an XBRL instance and check it against the EBA taxonomy and validation rules.</p>
+<p class="sub">Upload an XBRL instance and check it against the EBA taxonomy
+   and validation rules.</p>
 {error_html}
 <form action="/validate" method="post" enctype="multipart/form-data">
   <label for="instance">XBRL instance file</label>
   <input type="file" id="instance" name="instance" required>
 
-  <label for="taxonomy_packages">Taxonomy package(s) <span class="hint">(optional, .zip)</span></label>
+  <label for="taxonomy_packages">Taxonomy package(s)
+    <span class="hint">(optional, .zip)</span></label>
   <input type="file" id="taxonomy_packages" name="taxonomy_packages" multiple accept=".zip">
   <p class="hint">Leave empty to resolve from the local Arelle cache.</p>
 

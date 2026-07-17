@@ -6,14 +6,13 @@ from __future__ import annotations
 from collections.abc import Iterable
 from pathlib import Path
 
-from arelle import Validate, XbrlConst
+from arelle import Validate
 from arelle.ModelFormulaObject import FormulaOptions
 
 from xbrlval.config import ValidatorConfig
 from xbrlval.loader import CapturedRecord, InstanceLoader
 from xbrlval.model import BatchReport, Finding, Severity, ValidationLayer, ValidationReport
 from xbrlval.rules import run_custom_rules
-
 
 _LAYER_PREFIXES: list[tuple[tuple[str, ...], ValidationLayer]] = [
     (("lxml.", "xmlSchema", "xml.", "ioError", "FileNotLoadable"), ValidationLayer.XML),
